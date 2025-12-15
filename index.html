@@ -419,7 +419,7 @@
     }
 
     .section {
-      padding: 6rem 2rem;
+      padding: 4rem 2rem;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -466,6 +466,66 @@
       height: 100%;
       border: none;
     }
+
+    /* Video Gallery */
+.video-gallery-group {
+  margin-bottom: 3rem;
+}
+
+.gallery-subtitle {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--light-text);
+  margin-bottom: 1.2rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--primary);
+}
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.video-item {
+  background: var(--light-bg-alt);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12);
+}
+
+.video-item video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.video-caption {
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: var(--light-text-muted);
+  text-align: center;
+}
+
+/* Responsive for video grid */
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
     /* Abstract */
     .abstract-text {
@@ -739,38 +799,122 @@
 
     <!-- Degradation Training Section -->
     <section class="section" id="degradation">
-      <h2 class="section-title">Effectiveness of Degradation Training</h2>
-      <img src="assets/images/degradation_demo.png" alt="Degradation Training Demo" class="framework-image">
+      <h2 class="section-title">Training Pipeline</h2>
+      <img src="assets/images/training_pipeline.png" alt="Degradation Training Demo" class="framework-image">
       <p class="image-caption">
-        Visual comparison across training stages. The results indicate that the second stage alleviates visual degradation but introduces intra-clip inconsistency, which is subsequently resolved by the final stage of training.
-      </p>
-
-      <img src="assets/images/ablation.jpg" alt="Degradation Training Demo" class="framework-image" style="max-width: 90%;display: block; margin: 2rem auto 0;">
-      <p class="image-caption" style="text-align: center;">
-        Ablation on staged training of LongVie 2. We progressively introduce three stages: Control Learning, Degradation Adaptation, and History Context. Each stage consistently enhances visual quality, controllability, and long-term consistency.
+        Training pipeline of LongVie 2. We first train the model using a standard ControlNet-based pipeline. In the second stage, we introduce degradation to the first frame to bridge the domain gap between ground truth and generated frames. Finally, to ensure temporal consistency, we incorporate historical frame information.
       </p>
     </section>
 
+    <!-- Video Gallery Section -->
+<section class="section" id="video-gallery">
+  <h2 class="section-title">Generated Videos</h2>
+  
+  <div class="video-gallery-group">
+    <h3 class="gallery-subtitle">Character World</h3>
+    <div class="video-grid">
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/ride_horse_game_spring.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Spring</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/ride_horse_game_autumn.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Autumn</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/ride_horse_game_winter.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Winter</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-gallery-group">
+    <h3 class="gallery-subtitle">Environment World</h3>
+    <div class="video-grid">
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/fly_spring.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Spring</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/fly_autumn.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Autumn</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/fly_winter.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Winter</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-gallery-group">
+    <h3 class="gallery-subtitle">2-Minute Generation</h3>
+    <div class="video-grid">
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/knife_cut.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Cutting Vegetables</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/car_spring.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Driving on Road</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/game_night.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Walking at Night</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="video-gallery-group">
+    <h3 class="gallery-subtitle">5-Minute Ultra-Long Generation</h3>
+    <div class="video-grid">
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/chemical.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Chemical Factory</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/lake.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Island Town</p>
+      </div>
+      <div class="video-item">
+        <video controls muted loop playsinline>
+          <source src="assets/videos/skateborad.mp4" type="video/mp4">
+        </video>
+        <p class="video-caption">Skateboard</p>
+      </div>
+    </div>
+  </div>
+</section>
+
     <!-- Experiments Section -->
     <section class="section" id="experiments">
-      <h2 class="section-title">Experiments</h2>
+      <h2 class="section-title">Quantitative Result</h2>
 
       <img src="assets/images/metrics.jpg" alt="Metric" class="framework-image" style="max-width: 85%; display: block; margin: 0 auto;">
       <p class="image-caption" style="text-align: center;">
         Quantitative comparison of LongVie 2 and baselines on LongVGenBench. We compare LongVie 2 with base diffusion models, controllable generation models, and world models on LongVGenBench, evaluating visual quality, controllability, and long-term consistency. <strong>Bold</strong> indicates the best performance, and <u>underline</u> denotes the second-best.
       </p>
-
-      <img src="assets/images/control_demo.png" alt="Controllability Comparison" class="framework-image" style="max-width: 85%; display: block; margin: 0 auto;">
-      <p class="image-caption" style="text-align: center;">
-        Controllability comparison between LongVie 2 and baselines. LongVie 2 demonstrates markedly superior controllability, maintaining precise structural alignment and realistic appearance across frames compared with the baselines.
-      </p>
-
-      <img src="assets/images/long_demo.png" alt="Long-term Generation" class="framework-image" style="max-width: 85%; display: block; margin: 2rem auto 0;">
-      <p class="image-caption" style="text-align: center;">
-        Long-term generation demos. We present several videos generated by LongVie 2, each lasting over two minutes, demonstrating sustained visual quality and long-term temporal consistency.
-      </p>
-    </section>
-
   </main>
 
 
