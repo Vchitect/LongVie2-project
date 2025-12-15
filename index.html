@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Project website for LongVie 2 - Multimodal Controllable Ultra-Long Video World Model">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LongVie 2</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #8b5cf6;
+      --primary-light: #a78bfa;
+      --primary-dark: #7c3aed;
+      --accent: #06b6d4;
+      --accent-pink: #ec4899;
+      --dark: #030014;
+      --dark-light: #0a0a1f;
+      --text: #f8fafc;
+      --text-muted: #9da8b8;
+      /* Light theme colors for content */
+      --light-bg: #ffffff;
+      --light-bg-alt: #f8fafc;
+      --light-text: #1e293b;
+      --light-text-muted: #64748b;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ============================================
+       HERO SECTION - Video Wall Background
+       ============================================ */
+    .hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Video Grid Wall Background - Full screen, no perspective tilt */
+    .video-wall {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      opacity:0.5;  
+      z-index: 1;
+    }
+
+    /* Video Row */
+    .video-row {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      width: max-content;
+    }
+
+    /* Row animations - alternating directions */
+    .video-row:nth-child(1) {
+      animation: scrollLeft 60s linear infinite;
+    }
+
+    .video-row:nth-child(2) {
+      animation: scrollRight 55s linear infinite;
+    }
+
+    .video-row:nth-child(3) {
+      animation: scrollLeft 65s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    @keyframes scrollRight {
+      0% {
+        transform: translateX(-50%);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .video-cell {
+      position: relative;
+      flex-shrink: 0;
+      width: calc(130vw / 5 - 5px);
+      height: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #111;
+    }
+
+    .video-cell video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Light overlay for text readability - NO color tint */
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 2;
+    }
+
+    /* Hero Content Container */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+      max-width: 1000px;
+    }
+
+    /* Title - Simple gradient */
+    .hero-title {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      line-height: 1;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #a78bfa 0%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.5px;
+      animation: fadeInUp 1s ease-out 0.2s backwards;
+    }
+
+    .hero-subtitle .accent {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    /* Authors */
+    .authors {
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease-out 0.4s backwards;
+    }
+
+    .authors a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 400;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .authors a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--primary-light);
+      transition: width 0.3s ease;
+    }
+
+    .authors a:hover {
+      color: var(--primary-light);
+    }
+
+    .authors a:hover::after {
+      width: 100%;
+    }
+
+    .authors sup {
+      color: var(--accent);
+      font-size: 0.65rem;
+      margin-left: 1px;
+    }
+
+    .corresponding {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Affiliations */
+    .affiliations {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      animation: fadeInUp 1s ease-out 0.5s backwards;
+    }
+
+    .affiliations sup {
+      color: var(--accent);
+      margin-right: 2px;
+    }
+
+    /* Action Buttons */
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease-out 0.6s backwards;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+      color: white;
+      box-shadow: 
+        0 4px 20px rgba(139, 92, 246, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 
+        0 8px 30px rgba(139, 92, 246, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn i {
+      font-size: 1.2rem;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3rem;
+      animation: fadeInUp 1s ease-out 0.7s backwards;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0.25rem;
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeInUp 1s ease-out 0.9s backwards;
+    }
+
+    .scroll-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(180deg, var(--primary-light), transparent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: var(--accent);
+      animation: scrollPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0% { transform: translateY(-20px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(60px); opacity: 0; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+       MAIN CONTENT SECTIONS - White Background
+       ============================================ */
+    .main-content {
+      background: var(--light-bg);
+      position: relative;
+    }
+
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--light-text);
+    }
+
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 36px;
+      background: linear-gradient(180deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+
+    /* Video Demo Section */
+    .video-demo {
+      background: var(--light-bg-alt);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Abstract */
+    .abstract-text {
+      font-size: 1.15rem;
+      line-height: 2;
+      color: var(--light-text-muted);
+    }
+
+    .abstract-text strong {
+      color: var(--light-text);
+      font-weight: 500;
+    }
+
+    /* Teaser */
+    .teaser-container {
+      background: var(--light-bg-alt);
+      border: 1px solid rgba(139, 92, 246, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .teaser-container img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    /* Framework Image */
+    .framework-image {
+      width: 100%;
+      border-radius: 16px;
+      margin: 1.5rem 0;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-caption {
+      font-size: 1rem;
+      color: var(--light-text-muted);
+      line-height: 1.8;
+      margin-top: 1.5rem;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--light-text-muted);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      background: var(--light-bg);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .video-cell {
+        width: calc(100vw / 4 - 5px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .authors a {
+        font-size: 0.9rem;
+      }
+      
+      .affiliations {
+        font-size: 0.8rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+
+      .stats-bar {
+        gap: 1.5rem;
+      }
+
+      .stat-value {
+        font-size: 1.4rem;
+      }
+
+      .video-cell {
+        width: calc(100vw / 3 - 4px);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+    <section class="hero" id="hero">
+    <div class="video-wall">
+  
+      <!-- Row 1 - scrolls left（自然 / 航拍 / 风景） -->
+      <div class="video-row">
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/boat_on_lake.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/fly_autumn.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/fly_spring_valley.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/run.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/snow_ride.mp4" type="video/mp4"></video></div>
+  
+        <!-- Duplicate -->
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/boat_on_lake.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/fly_autumn.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/fly_spring_valley.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/run.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/snow_ride.mp4" type="video/mp4"></video></div>
+      </div>
+  
+      <!-- Row 2 - scrolls right（城市 / 汽车 / 夜景） -->
+      <div class="video-row">
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/car_spring.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_walk.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/drive.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_scene.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/moutain_car.mp4" type="video/mp4"></video></div>
+  
+        <!-- Duplicate -->
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/car_spring.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_walk.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/drive.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_scene.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/moutain_car.mp4" type="video/mp4"></video></div>
+      </div>
+  
+      <!-- Row 3 - scrolls left（人物 / 游戏 / 动作） -->
+      <div class="video-row">
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_walk.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/game_night.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/game_beach.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/knife_cut.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/tiger.mp4" type="video/mp4"></video></div>
+  
+        <!-- Duplicate -->
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/night_walk.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/game_night.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/game_beach.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/knife_cut.mp4" type="video/mp4"></video></div>
+        <div class="video-cell"><video autoplay muted loop playsinline><source src="assets/videos/tiger.mp4" type="video/mp4"></video></div>
+      </div>
+  
+    </div>
+    <!-- Overlay - pure dark, no color tint -->
+    <div class="hero-overlay"></div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="highlight">LongVie 2</span>
+      </h1>
+      <p class="hero-subtitle">
+        Multimodal Controllable Ultra-Long Video World Model
+      </p>
+
+      <!-- Authors -->
+      <div class="authors">
+        <a href="https://jianxgao.github.io/" target="_blank">Jianxiong Gao</a><sup>1</sup>,
+        <a href="https://frozenburning.github.io/" target="_blank">Zhaoxi Chen</a><sup>3</sup>,
+        <a href="https://alvinliu0.github.io/" target="_blank">Xian Liu</a><sup>4</sup>,
+        <a href="https://zhuang2002.github.io/" target="_blank">Junhao Zhuang</a><sup>5</sup>,
+        <a href="https://chmxu.github.io/" target="_blank">Chengming Xu</a><sup>1</sup>,
+        <br>
+        <a href="https://www.dcs.warwick.ac.uk/~feng/" target="_blank">Jianfeng Feng</a><sup>1</sup>,
+        <a href="https://mmlab.siat.ac.cn/yuqiao" target="_blank">Yu Qiao</a><sup>6</sup>,
+        <a href="https://yanweifu.github.io/" target="_blank">Yanwei Fu</a><sup>1†</sup>,
+        <a href="https://chenyangsi.top/" target="_blank">Chenyang Si</a><sup>2†</sup>,
+        <a href="https://liuziwei7.github.io/" target="_blank">Ziwei Liu</a><sup>3†</sup>
+        <p class="corresponding">† corresponding authors</p>
+      </div>
+
+      <!-- Affiliations -->
+      <div class="affiliations">
+        <sup>1</sup>Fudan University &nbsp;&nbsp;
+        <sup>2</sup>Nanjing University &nbsp;&nbsp;
+        <sup>3</sup>S-Lab, NTU &nbsp;&nbsp;
+        <sup>4</sup>Nvidia &nbsp;&nbsp;
+        <sup>5</sup>Tsinghua University &nbsp;&nbsp;
+        <sup>6</sup>Shanghai AI Lab
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="hero-actions">
+        <a href="https://arxiv.org/abs/2508.03694" target="_blank" class="btn btn-primary">
+          <i class="bi bi-file-earmark-text"></i>
+          Arxiv
+        </a>
+        <a href="https://github.com/Vchitect/LongVie" target="_blank" class="btn btn-outline">
+          <i class="bi bi-github"></i>
+          Code
+        </a>
+        <a href="https://youtu.be/ln1kMNYj50Y" class="btn btn-outline">
+          <i class="bi bi-play-circle"></i>
+          Video
+        </a>
+      </div>
+
+
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+      <span class="scroll-text">Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       MAIN CONTENT - White Background
+       ============================================ -->
+  <main class="main-content">
+    
+    <!-- Video Demo Section -->
+    <section class="section" id="video-demo">
+      <h2 class="section-title">Video Demo</h2>
+      <div class="video-demo">
+        <div class="video-container">
+          <iframe 
+            src="https://www.youtube.com/embed/ln1kMNYj50Y?rel=0&modestbranding=1&playsinline=1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen 
+            title="LongVie 2 Demo Video">
+          </iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section class="section" id="abstract">
+      <h2 class="section-title">Abstract</h2>
+      <p class="abstract-text">
+        Building video world models upon pretrained video generation systems represents an important yet challenging step toward general spatiotemporal intelligence.
+        A world model should possess three essential properties: controllability, long-term visual quality, and temporal consistency.
+        To this end, we take a progressive approach—first enhancing controllability and then extending toward long-term, high-quality generation.
+        We present <strong>LongVie 2</strong>, an end-to-end autoregressive framework trained in three stages:
+        (1) Multi-modal guidance, which integrates dense and sparse control signals to provide implicit world-level supervision and <strong>improve controllability</strong>;
+        (2) Degradation-aware training on the input frame, bridging the gap between training and long-term inference to maintain <strong>high visual quality</strong>; and
+        (3) History-context guidance, which aligns contextual information across adjacent clips to <strong>ensure temporal consistency</strong>.
+        We further introduce <strong>LongVGenBench</strong>, a comprehensive benchmark comprising 100 high-resolution one-minute videos covering diverse real-world and synthetic environments.
+        Extensive experiments demonstrate that LongVie 2 achieves state-of-the-art performance in long-range controllability, temporal coherence, and visual fidelity, 
+        and supports continuous video generation lasting up to <strong>five minutes</strong>, marking a significant step toward unified video world modeling.
+      </p>
+
+      <div class="teaser-container">
+        <img src="assets/images/teaser.png" alt="LongVie 2 Teaser">
+        <p class="image-caption">
+          LongVie 2 is a controllable ultra-long video world model that autoregressively generates videos lasting up to 3–5 minutes.
+          It is driven by world-level guidance integrating both dense and sparse control signals, trained with a degradation-aware strategy to bridge the gap between training and long-term inference, and enhanced with history-context modeling to maintain long-term temporal consistency.
+        </p>
+      </div>
+    </section>
+
+    <!-- Framework Section -->
+    <section class="section" id="framework">
+      <h2 class="section-title">Framework</h2>
+      <img src="assets/images/framework.png" alt="LongVie 2 Framework" class="framework-image">
+      <p class="image-caption">
+        LongVie 2 serves as a controllable video world model that integrates both dense and sparse control
+        signals to provide world-level guidance for enhanced controllability. A degradation-aware training strategy improves long-term visual quality,
+        while tail frames from preceding clips are incorporated as historical context to maintain temporal consistency over extended durations.
+      </p>
+    </section>
+
+    <!-- Degradation Training Section -->
+    <section class="section" id="degradation">
+      <h2 class="section-title">Effectiveness of Degradation Training</h2>
+      <img src="assets/images/degradation_demo.png" alt="Degradation Training Demo" class="framework-image">
+      <p class="image-caption">
+        Visual comparison across training stages. The results indicate that the second stage alleviates visual degradation but introduces intra-clip inconsistency, which is subsequently resolved by the final stage of training.
+      </p>
+
+      <img src="assets/images/ablation.jpg" alt="Degradation Training Demo" class="framework-image" style="max-width: 90%;display: block; margin: 2rem auto 0;">
+      <p class="image-caption" style="text-align: center;">
+        Ablation on staged training of LongVie 2. We progressively introduce three stages: Control Learning, Degradation Adaptation, and History Context. Each stage consistently enhances visual quality, controllability, and long-term consistency.
+      </p>
+    </section>
+
+    <!-- Experiments Section -->
+    <section class="section" id="experiments">
+      <h2 class="section-title">Experiments</h2>
+
+      <img src="assets/images/metrics.jpg" alt="Metric" class="framework-image" style="max-width: 85%; display: block; margin: 0 auto;">
+      <p class="image-caption" style="text-align: center;">
+        Quantitative comparison of LongVie 2 and baselines on LongVGenBench. We compare LongVie 2 with base diffusion models, controllable generation models, and world models on LongVGenBench, evaluating visual quality, controllability, and long-term consistency. <strong>Bold</strong> indicates the best performance, and <u>underline</u> denotes the second-best.
+      </p>
+
+      <img src="assets/images/control_demo.png" alt="Controllability Comparison" class="framework-image" style="max-width: 85%; display: block; margin: 0 auto;">
+      <p class="image-caption" style="text-align: center;">
+        Controllability comparison between LongVie 2 and baselines. LongVie 2 demonstrates markedly superior controllability, maintaining precise structural alignment and realistic appearance across frames compared with the baselines.
+      </p>
+
+      <img src="assets/images/long_demo.png" alt="Long-term Generation" class="framework-image" style="max-width: 85%; display: block; margin: 2rem auto 0;">
+      <p class="image-caption" style="text-align: center;">
+        Long-term generation demos. We present several videos generated by LongVie 2, each lasting over two minutes, demonstrating sustained visual quality and long-term temporal consistency.
+      </p>
+    </section>
+
+  </main>
+
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Parallax on scroll
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero-content');
+        
+        if (hero && scrolled < window.innerHeight) {
+          hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+          hero.style.opacity = 1 - (scrolled / (window.innerHeight * 0.8));
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
