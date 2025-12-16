@@ -76,7 +76,44 @@
       opacity:0.5;  
       z-index: 1;
     }
+/* Citation Block */
+.citation-block {
+  background: var(--light-bg-alt);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+}
 
+.citation-block pre {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--light-text);
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
     /* Video Row */
     .video-row {
       display: flex;
@@ -918,8 +955,39 @@
   </main>
 
 
+<!-- Citation Section -->
+<section class="section" id="citation">
+  <h2 class="section-title">BibTeX</h2>
+  <div class="citation-block">
+    <pre id="citation-text">@misc{gao2025longvie2,
+  title={LongVie 2: Multimodal Controllable Ultra-Long Video World Model}, 
+  author={Jianxiong Gao and Zhaoxi Chen and Xian Liu and Junhao Zhuang and Chengming Xu and Jianfeng Feng and Yu Qiao and Yanwei Fu and Chenyang Si and Ziwei Liu},
+  year={2025},
+  eprint={2512.13604},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2512.13604}, 
+}</pre>
+    <button class="copy-btn" onclick="copyBibtex()">
+      <i class="bi bi-clipboard"></i> Copy
+    </button>
+  </div>
+</section>
+
+
   <!-- JavaScript -->
   <script>
+    function copyBibtex() {
+  const text = document.getElementById('citation-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+    setTimeout(() => {
+      btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+    }, 2000);
+  });
+}
+
     document.addEventListener('DOMContentLoaded', function() {
       // Smooth scroll
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
